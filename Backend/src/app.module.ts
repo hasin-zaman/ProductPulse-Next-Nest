@@ -14,9 +14,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { RolesGuard } from './utils/roles.guard';
 import { JwtService } from '@nestjs/jwt';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
-  imports: [AuthModule, AdminModule, UserModule, ComplaintModule, ConfigModule.forRoot({isGlobal: true}),
+  imports: [AuthModule, AdminModule, UserModule, ComplaintModule, ConfigModule.forRoot({isGlobal: true}), 
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10
+    }),
     TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     useFactory: async (configService: ConfigService) => ({

@@ -1,4 +1,5 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete, ParseIntPipe } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param, Patch, Delete, ParseIntPipe, UseGuards } from "@nestjs/common";
+import { ThrottlerGuard } from "@nestjs/throttler/dist/throttler.guard";
 import { Public } from "src/utils/isPublic.decorator";
 import { ComplaintDto } from "./complaint.dto";
 import { ComplaintService } from "./complaint.service";
@@ -9,6 +10,7 @@ export class ComplaintController {
 
     @Public()
     @Post(':id')
+    @UseGuards(ThrottlerGuard)
     registerComplaint(@Param('id', ParseIntPipe) id: number, @Body() complaintDto: ComplaintDto) {
         return this.complaintService.registerComplaint(id, complaintDto);
     }
