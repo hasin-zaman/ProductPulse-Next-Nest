@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { comparePasswords } from 'src/utils/bcrypt';
 import { AdminService } from '../admins/admin.service';
 
 @Injectable()
@@ -9,8 +10,8 @@ export class AuthService {
     async login(userName: string, pass: string): Promise<any> {
         const admin=await this.adminService.getAdmin(userName);
 
-        if(admin?.password!==pass){
-            throw new UnauthorizedException('Invalid user name or password');
+        if(!comparePasswords(pass, admin.password)){
+            throw new UnauthorizedException('Invalid password.');
         }
 
         const { password, ...data } = admin;

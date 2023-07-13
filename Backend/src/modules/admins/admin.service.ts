@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, ConflictException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hashPassword } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { AdminParams } from './admin.type';
@@ -14,11 +15,9 @@ export class AdminService {
             throw new ConflictException('This user name is already in use.');
         }
 
-        if(adminDetails.role!="admin" && adminDetails.role!="sub-admin"){
-            throw new UnprocessableEntityException('Invalid role provided');
-        }
+        const password=hashPassword(adminDetails.password);
 
-        const admin=this.adminRepository.create({ ...adminDetails, createdAt: new Date() });
+        const admin=this.adminRepository.create({ ...adminDetails, password, createdAt: new Date() });
         return await this.adminRepository.save(admin);
     }
 
@@ -31,11 +30,6 @@ export class AdminService {
     }
 
     async updateAdmin(userName: string, adminDetails: AdminParams) {
-        
-        if(adminDetails.role && adminDetails.role!="admin" && adminDetails.role!="sub-admin"){
-            throw new UnprocessableEntityException('Invalid role provided');
-        }
-
         return await this.adminRepository.update({ userName: userName }, { ...adminDetails });
     }
 
