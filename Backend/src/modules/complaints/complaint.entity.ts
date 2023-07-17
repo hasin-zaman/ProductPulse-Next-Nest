@@ -1,11 +1,9 @@
+import { ComplaintAgainst } from "src/enums/complaintAgainst";
+import { ComplaintOffice } from "src/enums/complaintOffice";
+import { ComplaintStatus } from "src/enums/complaintStatus";
+import { ComplaintType } from "src/enums/complaintType";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../users/user.entity";
-
-enum ComplaintStatus {
-    UNREAD = 'unread',
-    READ = 'read-and-unresolved',
-    RESOLVED = 'resolved'
-}
 
 @Entity({ name: 'complaints'})
 export class Complaint {
@@ -18,11 +16,39 @@ export class Complaint {
 
     @Column({
         nullable: false,
+        type: 'enum',
+        enum: ComplaintType
+    })
+    type: ComplaintType
+
+    @Column({
+        nullable: false,
+        type: 'enum',
+        enum: ComplaintOffice
+    })
+    complaintOffice: ComplaintOffice
+
+    @Column({
+        nullable: false,
+        default: ''
+    })
+    subject: string
+
+    @Column({
+        nullable: false,
+        type: 'enum',
+        enum: ComplaintAgainst
+    })
+    complaintAgainst: ComplaintAgainst
+
+    @Column({
+        nullable: false,
         default: ''
     })
     complaint: string
     
     @Column({
+        nullable: false,
         type: 'enum',
         enum: ComplaintStatus,
         default: ComplaintStatus.UNREAD

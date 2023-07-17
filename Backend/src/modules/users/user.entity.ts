@@ -1,32 +1,46 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Complaint } from "../complaints/complaint.entity";
 
 @Entity({ name: 'users' })
 export class User {
 
-    @PrimaryGeneratedColumn({
-        type: 'int',
-        name: 'user_id'
+    @PrimaryColumn({
+        nullable: false,
+        type: 'varchar',
+        length: 15,
+        unique: true
     })
-    userId: number
+    cnic: string;
 
     @Column({
-        nullable: false,
-        default: ''
+        nullable: false
     })
     name: string
 
     @Column({
-        nullable: false,
-        default: 0
+        nullable: false
     })
-    phone: number
+    address: string
+
+    @Column({
+        nullable: false
+    })
+    district: string
+
+    @Column({
+        nullable: true
+    })
+    phone: string
+
+    @Column({
+        nullable: false
+    })
+    mobile: string
     
     @Column({
-        nullable: false,
-        default: 0
+        nullable: true
     })
-    cnic: number
+    email: string
 
     @Column()
     createdAt: Date

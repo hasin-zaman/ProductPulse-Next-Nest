@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Complaint } from '../complaints/complaint.entity';
@@ -12,6 +12,16 @@ export class UserService {
         @InjectRepository(Complaint) private complaintRepository: Repository<Complaint>) {}
 
     async createUser(userDetails: UserParams){
+        
+        if (Object.keys(userDetails).length === 0) {
+            throw new BadRequestException('Req.body cannot be empty.');
+        }
+
+        const existingUser=await this.userRepository.findOneBy({ cnic: userDetails.cnic });
+        if(existingUser){
+            throw new ConflictException('This cnic has already been registered.')
+        }
+
         const user=this.userRepository.create({ ...userDetails, createdAt: new Date() });
         return await this.userRepository.save(user);
     }
@@ -20,20 +30,34 @@ export class UserService {
         return await this.userRepository.find({ relations: ['complaints'] });
     }
 
-    async getUser(id: number) {
-        return await this.findUser(id);
+    async getUser(cnic: string) {
+        return await this.findUser(cnic);
     }
 
-    async updateUser(id: number, userDetails: UserParams) {
-        return await this.userRepository.update({ userId: id }, { ...userDetails })
+    async updateUser(cnic: string, userDetails: UserParams) {
+        
+        if (Object.keys(userDetails).length === 0) {
+            throw new BadRequestException('Req.body cannot be empty.');
+        }
+
+        await this.findUser(cnic);
+
+        if(userDetails.cnic){
+            const existingUser=await this.userRepository.findOneBy({ cnic: userDetails.cnic });
+            if(existingUser){
+                throw new ConflictException('This cnic has already been registered.')
+            }
+        }
+
+        return await this.userRepository.update({ cnic: cnic }, { ...userDetails })
     }
 
-    async deleteUser(id: number) {
-        const user=await this.findUser(id);
+    async deleteUser(cnic: string) {
+        const user=await this.findUser(cnic);
 
         await this.complaintRepository.delete({ user: user });
 
-        const deleteUser=await this.userRepository.delete({userId: id});
+        const deleteUser=await this.userRepository.delete({ cnic: cnic });
 
         if(deleteUser.affected===0){
             throw new InternalServerErrorException('Failed to delete user.');
@@ -42,11 +66,11 @@ export class UserService {
         return deleteUser;
     }
     
-    private async findUser(id: number){
+    private async findUser(cnic: string){
         const user=await this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.complaints', 'complaints')
-            .where('user.userId = :id', { id })
+            .where('user.cnic = :cnic', { cnic })
             .getOne();
 
         if(!user){

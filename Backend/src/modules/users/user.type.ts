@@ -1,5 +1,9 @@
 export type UserParams = {
+    cnic: string;
     name: string;
-    phone: number;
-    cnic: number;
+    address: string;
+    district: string;
+    phone: string;
+    mobile: string;
+    email: string;
 }

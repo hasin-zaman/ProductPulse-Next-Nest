@@ -1,6 +1,9 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete, ParseIntPipe } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param, Patch, Delete, UseGuards } from "@nestjs/common";
+import { UsePipes } from "@nestjs/common/decorators";
+import { ValidationPipe } from "@nestjs/common/pipes";
+import { ThrottlerGuard } from "@nestjs/throttler/dist/throttler.guard";
 import { Public } from "src/utils/isPublic.decorator";
-import { UserDto } from "./user.dto";
+import { createUserDto, updateUserDto } from "./user.dto";
 import { UserService } from "./user.service";
 
 @Controller('users')
@@ -9,7 +12,9 @@ export class UserController {
 
     @Public()
     @Post()
-    createUser(@Body() userDto: UserDto) {
+    @UseGuards(ThrottlerGuard)
+    @UsePipes(ValidationPipe)
+    createUser(@Body() userDto: createUserDto) {
         return this.userService.createUser(userDto);
     }
 
@@ -18,18 +23,19 @@ export class UserController {
         return this.userService.getUsers();
     }
 
-    @Get(':id')
-    getUser(@Param('id', ParseIntPipe) id: number){
-        return this.userService.getUser(id);
+    @Get(':cnic')
+    getUser(@Param('cnic') cnic: string){
+        return this.userService.getUser(cnic);
     }
 
-    @Patch(':id')
-    updateUser(@Param('id', ParseIntPipe) id: number, @Body() userDto: UserDto) {
-        return this.userService.updateUser(id, userDto);
+    @Patch(':cnic')
+    @UsePipes(ValidationPipe)
+    updateUser(@Param('cnic') cnic: string, @Body() userDto: updateUserDto) {
+        return this.userService.updateUser(cnic, userDto);
     }
 
-    @Delete(':id')
-    deleteUser(@Param('id', ParseIntPipe) id: number) {
-        return this.userService.deleteUser(id);
+    @Delete(':cnic')
+    deleteUser(@Param('cnic') cnic: string) {
+        return this.userService.deleteUser(cnic);
     }
 }

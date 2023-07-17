@@ -1,8 +1,4 @@
-enum ComplaintStatus {
-    UNREAD = 'unread',
-    READ = 'read-and-unresolved',
-    RESOLVED = 'resolved'
-}
+import { ComplaintStatus } from "src/enums/complaintStatus";
 
 export type ComplaintParams = {
     complaint: string;

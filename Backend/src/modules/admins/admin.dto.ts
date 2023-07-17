@@ -1,4 +1,4 @@
-import { Role } from "src/utils/role.enum";
+import { Role } from "src/enums/role.enum";
 
 export class AdminDto {
     name: string;
