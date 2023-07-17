@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException, UnprocessableEntityException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashPassword } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
@@ -22,7 +22,10 @@ export class AdminService {
 
         const password=hashPassword(adminDetails.password);
 
-        const admin=this.adminRepository.create({ ...adminDetails, password, createdAt: new Date() });
+        const currentTime=new Date();
+        currentTime.setHours(currentTime.getHours() + 5);
+
+        const admin=this.adminRepository.create({ ...adminDetails, password, createdAt: currentTime });
         return await this.adminRepository.save(admin);
     }
 

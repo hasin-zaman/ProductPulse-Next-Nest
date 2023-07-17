@@ -22,7 +22,10 @@ export class UserService {
             throw new ConflictException('This cnic has already been registered.')
         }
 
-        const user=this.userRepository.create({ ...userDetails, createdAt: new Date() });
+        const currentTime=new Date();
+        currentTime.setHours(currentTime.getHours() + 5);
+
+        const user=this.userRepository.create({ ...userDetails, createdAt: currentTime });
         return await this.userRepository.save(user);
     }
 

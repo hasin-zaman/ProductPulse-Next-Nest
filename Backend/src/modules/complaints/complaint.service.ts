@@ -20,7 +20,11 @@ export class ComplaintService {
         }
 
         const user=await this.findUser(cnic);
-        const complaint=this.complaintRepository.create({...complaintDetails, user, createdAt: new Date()});
+
+        const currentTime=new Date();
+        currentTime.setHours(currentTime.getHours() + 5);
+
+        const complaint=this.complaintRepository.create({ ...complaintDetails, user, createdAt: currentTime });
 
         return await this.complaintRepository.save(complaint);
     }
