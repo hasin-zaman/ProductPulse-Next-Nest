@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ComplaintType } from 'src/enums/complaintType';
+import { PaginationDto } from 'src/utils/pagination.dto';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Complaint } from './complaint.entity';
@@ -29,16 +30,25 @@ export class ComplaintService {
         return await this.complaintRepository.save(complaint);
     }
 
-    async getComplaints(){
-        return await this.complaintRepository.find({ relations: ['user'] });
+    async getComplaints(paginationDto: PaginationDto){
+        const { page, limit } = paginationDto;
+        const skip = (page-1) * limit;
+
+        return await this.complaintRepository.find({ skip, take: limit, relations: ['user'] });
     }
 
-    async getComplaintsGeneral(){
-        return await this.complaintRepository.find({ where: { type: ComplaintType.GENERAL }, relations: ['user'] });
+    async getComplaintsGeneral(paginationDto: PaginationDto){
+        const { page, limit } = paginationDto;
+        const skip = (page-1) * limit;
+
+        return await this.complaintRepository.find({ skip, take: limit, where: { type: ComplaintType.GENERAL }, relations: ['user'] });
     }
 
-    async getComplaintsChildRelated(){
-        return await this.complaintRepository.find({ where: { type: ComplaintType.CHILDRELATED }, relations: ['user'] });
+    async getComplaintsChildRelated(paginationDto: PaginationDto){
+        const { page, limit } = paginationDto;
+        const skip = (page-1) * limit;
+
+        return await this.complaintRepository.find({ skip, take: limit, where: { type: ComplaintType.CHILDRELATED }, relations: ['user'] });
     }
 
     async getComplaint(id: number){
@@ -83,6 +93,7 @@ export class ComplaintService {
         const complaint=await this.complaintRepository
             .createQueryBuilder('complaint')
             .leftJoinAndSelect('complaint.user', 'user')
+            .leftJoinAndSelect('complaint.responses', 'responses')
             .where('complaint.complaintId = :id', { id })
             .getOne();
 

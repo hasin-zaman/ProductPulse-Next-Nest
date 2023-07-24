@@ -1,8 +1,7 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete, UseGuards } from "@nestjs/common";
-import { UsePipes } from "@nestjs/common/decorators";
-import { ValidationPipe } from "@nestjs/common/pipes";
+import { Controller, Post, Get, Body, Param, Patch, Delete, UseGuards, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ThrottlerGuard } from "@nestjs/throttler/dist/throttler.guard";
 import { Public } from "src/utils/isPublic.decorator";
+import { PaginationDto } from "src/utils/pagination.dto";
 import { createUserDto, updateUserDto } from "./user.dto";
 import { UserService } from "./user.service";
 
@@ -19,8 +18,9 @@ export class UserController {
     }
 
     @Get()
-    getUsers(){
-        return this.userService.getUsers();
+    @UsePipes(ValidationPipe)
+    getUsers(@Query() paginationDto: PaginationDto){
+        return this.userService.getUsers(paginationDto);
     }
 
     @Get(':cnic')

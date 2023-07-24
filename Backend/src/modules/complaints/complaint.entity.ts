@@ -2,7 +2,8 @@ import { ComplaintAgainst } from "src/enums/complaintAgainst";
 import { ComplaintOffice } from "src/enums/complaintOffice";
 import { ComplaintStatus } from "src/enums/complaintStatus";
 import { ComplaintType } from "src/enums/complaintType";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Response } from "../responses/response.entity";
 import { User } from "../users/user.entity";
 
 @Entity({ name: 'complaints'})
@@ -60,4 +61,7 @@ export class Complaint {
 
     @ManyToOne(() => User, user => user.complaints)
     user: User
+
+    @OneToMany(() => Response, response => response.complaint)
+    responses: Response[];
 }

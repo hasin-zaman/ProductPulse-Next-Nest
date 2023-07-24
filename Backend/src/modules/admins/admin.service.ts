@@ -51,7 +51,11 @@ export class AdminService {
     }
     
     private async findAdmin(userName: string){
-        const admin=await this.adminRepository.findOneBy({ userName: userName });
+        const admin=await this.adminRepository
+        .createQueryBuilder('admin')
+        .leftJoinAndSelect('admin.responses', 'responses')
+        .where('admin.userName = :userName', { userName })
+        .getOne();
 
         if(!admin){
             throw new NotFoundException('Admin Not Found.');

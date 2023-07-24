@@ -1,8 +1,9 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete, ParseIntPipe, UseGuards } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param, Patch, Delete, ParseIntPipe, UseGuards, Query } from "@nestjs/common";
 import { UsePipes } from "@nestjs/common/decorators";
 import { ValidationPipe } from "@nestjs/common/pipes";
 import { ThrottlerGuard } from "@nestjs/throttler/dist/throttler.guard";
 import { Public } from "src/utils/isPublic.decorator";
+import { PaginationDto } from "src/utils/pagination.dto";
 import { registerComplaintDto } from "./complaint.dto";
 import { ComplaintService } from "./complaint.service";
 
@@ -19,18 +20,21 @@ export class ComplaintController {
     }
 
     @Get()
-    getComplaints() {
-        return this.complaintService.getComplaints();
+    @UsePipes(ValidationPipe)
+    getComplaints(@Query() paginationDto: PaginationDto) {
+        return this.complaintService.getComplaints(paginationDto);
     }
 
     @Get('general')
-    getComplaintsGeneral() {
-        return this.complaintService.getComplaintsGeneral();
+    @UsePipes(ValidationPipe)
+    getComplaintsGeneral(@Query() paginationDto: PaginationDto) {
+        return this.complaintService.getComplaintsGeneral(paginationDto);
     }
 
     @Get('child-related')
-    getComplaintsChildRelated() {
-        return this.complaintService.getComplaintsChildRelated();
+    @UsePipes(ValidationPipe)
+    getComplaintsChildRelated(@Query() paginationDto: PaginationDto) {
+        return this.complaintService.getComplaintsChildRelated(paginationDto);
     }
 
     @Get(':id')

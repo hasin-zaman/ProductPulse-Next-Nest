@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from 'src/utils/pagination.dto';
 import { Repository } from 'typeorm';
 import { Complaint } from '../complaints/complaint.entity';
 import { User } from './user.entity';
@@ -29,8 +30,11 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    async getUsers(){
-        return await this.userRepository.find({ relations: ['complaints'] });
+    async getUsers(paginationDto: PaginationDto){
+        const { page, limit } = paginationDto;
+        const skip=(page-1) * limit;
+
+        return await this.userRepository.find({ skip, take: limit, relations: ['complaints'] });
     }
 
     async getUser(cnic: string) {

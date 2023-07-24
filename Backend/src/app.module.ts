@@ -15,9 +15,11 @@ import { AuthGuard } from './modules/auth/auth.guard';
 import { RolesGuard } from './utils/roles.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { Response } from './modules/responses/response.entity';
+import { ResponseModule } from './modules/responses/response.module';
 
 @Module({
-  imports: [AuthModule, AdminModule, UserModule, ComplaintModule, ConfigModule.forRoot({isGlobal: true}), 
+  imports: [AuthModule, AdminModule, UserModule, ComplaintModule, ResponseModule, ConfigModule.forRoot({isGlobal: true}), 
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 10
@@ -31,7 +33,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       username: configService.get<string>('DB_USER'),
       password: configService.get<string>('DB_PASSWORD'),
       database: configService.get<string>('DB_DATABASE'),
-      entities: [Admin, User, Complaint],
+      entities: [Admin, User, Complaint, Response],
       synchronize: true
     }),
     inject: [ConfigService]
