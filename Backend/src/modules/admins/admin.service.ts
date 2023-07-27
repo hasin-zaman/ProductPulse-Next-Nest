@@ -43,6 +43,10 @@ export class AdminService {
             throw new BadRequestException('Req.body cannot be empty.');
         }
 
+        if(adminDetails.hasOwnProperty('password')){
+            adminDetails.password=hashPassword(adminDetails.password);
+        }
+
         return await this.adminRepository.update({ userName: userName }, { ...adminDetails });
     }
 

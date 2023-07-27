@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ComplaintType } from 'src/enums/complaintType';
+import complaintEnumMapping from 'src/utils/complaintEnumMapping';
 import { PaginationDto } from 'src/utils/pagination.dto';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
@@ -37,22 +37,73 @@ export class ComplaintService {
         return await this.complaintRepository.find({ skip, take: limit, relations: ['user'] });
     }
 
-    async getComplaintsGeneral(paginationDto: PaginationDto){
+    async filterComplaints(paginationDto: PaginationDto, filter: string, value: string){
         const { page, limit } = paginationDto;
         const skip = (page-1) * limit;
 
-        return await this.complaintRepository.find({ skip, take: limit, where: { type: ComplaintType.GENERAL }, relations: ['user'] });
-    }
+        const filterableFields = {
+            type: 'type',
+            status: 'status',
+            complaintOffice: 'complaintOffice',
+            complaintAgainst: 'complaintAgainst'
+        }
 
-    async getComplaintsChildRelated(paginationDto: PaginationDto){
-        const { page, limit } = paginationDto;
-        const skip = (page-1) * limit;
+        const where = {}
 
-        return await this.complaintRepository.find({ skip, take: limit, where: { type: ComplaintType.CHILDRELATED }, relations: ['user'] });
+        if(filter && filterableFields[filter]){
+            let enumValue;
+            if(filter==='type'){
+                enumValue=complaintEnumMapping.ComplaintTypeEnumMapping[value];
+
+                if(enumValue===undefined){ 
+                    throw new BadRequestException(`Invalid type value. Choose from valid values: ${Object.keys(complaintEnumMapping.ComplaintTypeEnumMapping).join(', ')}`);
+                }
+            }
+            else if(filter==='status'){
+                enumValue=complaintEnumMapping.ComplaintStatusEnumMapping[value];
+
+                if(enumValue===undefined){ 
+                    throw new BadRequestException(`Invalid status value. Choose from valid values: ${Object.keys(complaintEnumMapping.ComplaintStatusEnumMapping).join(', ')}`);
+                }
+            }
+            else if(filter==='complaintOffice'){
+                enumValue=complaintEnumMapping.ComplaintOfficeEnumMapping[value];
+
+                if(enumValue===undefined){ 
+                    throw new BadRequestException(`Invalid complaitOffice value. Choose from valid values: ${Object.keys(complaintEnumMapping.ComplaintOfficeEnumMapping).join(', ')}`);
+                }
+            }
+            else if(filter==='complaintAgainst'){
+                enumValue=complaintEnumMapping.ComplaintAgainstEnumMapping[value];
+
+                if(enumValue===undefined){ 
+                    throw new BadRequestException(`Invalid complaintAgainst value. Choose from valid values: ${Object.keys(complaintEnumMapping.ComplaintAgainstEnumMapping).join(', ')}`);
+                }
+            }
+
+            where[filterableFields[filter]]=enumValue;
+        }
+        else{
+            throw new BadRequestException(`Invalid filter parameter. Choose from valid parameters: ${Object.keys(filterableFields).join(', ')}`);
+        }
+
+        return await this.complaintRepository.find({ skip, take: limit, relations: ['user'], where });
     }
 
     async getComplaint(id: number){
         return await this.findComplaint(id);
+    }
+
+    async updateStatus(id: number, status: string){
+        const enumStatus=complaintEnumMapping.ComplaintStatusEnumMapping[status];
+
+        if(enumStatus===undefined){ 
+            throw new BadRequestException(`Invalid status value. Choose from valid values: ${Object.keys(complaintEnumMapping.ComplaintStatusEnumMapping).join(', ')}`);
+        }
+        
+        await this.findComplaint(id);
+
+        return await this.complaintRepository.update({ complaintId: id }, { status: enumStatus })
     }
 
     async deleteComplaint(id: number){

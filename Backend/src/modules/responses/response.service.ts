@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ResponseStatus } from 'src/enums/responseStatus';
 import { PaginationDto } from 'src/utils/pagination.dto';
 import { Repository } from 'typeorm';
 import { Admin } from '../admins/admin.entity';
@@ -43,6 +44,12 @@ export class ResponseService {
         return await this.findResponse(id);
     }
 
+    async updateStatus(id: number){
+        await this.findResponse(id);
+
+        return await this.responseRepository.update({ responseId: id }, { status: ResponseStatus.READ });
+    }
+
     private async findAdmin(userName: string){
         const admin=await this.adminRepository.findOneBy({ userName: userName });
 
@@ -68,6 +75,7 @@ export class ResponseService {
     private async findResponse(id: number){
         const response=await this.responseRepository
             .createQueryBuilder('response')
+            .leftJoinAndSelect('response.complaint', 'complaint')
             .leftJoinAndSelect('response.admin', 'admin')
             .where('response.responseId = :id', { id })
             .getOne();

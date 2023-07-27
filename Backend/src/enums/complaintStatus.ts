@@ -1,5 +1,5 @@
 export enum ComplaintStatus {
     UNREAD = 'unread',
-    READ = 'read-and-unresolved',
+    READANDUNRESOLVED = 'read-and-unresolved',
     RESOLVED = 'resolved'
 }

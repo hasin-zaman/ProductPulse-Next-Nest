@@ -25,21 +25,20 @@ export class ComplaintController {
         return this.complaintService.getComplaints(paginationDto);
     }
 
-    @Get('general')
+    @Get('filter/:filter/:value')
     @UsePipes(ValidationPipe)
-    getComplaintsGeneral(@Query() paginationDto: PaginationDto) {
-        return this.complaintService.getComplaintsGeneral(paginationDto);
-    }
-
-    @Get('child-related')
-    @UsePipes(ValidationPipe)
-    getComplaintsChildRelated(@Query() paginationDto: PaginationDto) {
-        return this.complaintService.getComplaintsChildRelated(paginationDto);
+    filterComplaints(@Query() paginationDto: PaginationDto, @Param('filter') filter: string, @Param('value') value: string) {
+        return this.complaintService.filterComplaints(paginationDto, filter, value);
     }
 
     @Get(':id')
     getComplaint(@Param('id', ParseIntPipe) id: number) {
         return this.complaintService.getComplaint(id);
+    }
+
+    @Patch(':id/status/:status')
+    updateStatus(@Param('id', ParseIntPipe) id: number, @Param('status') status: string) {
+        return this.complaintService.updateStatus(id, status);
     }
 
     @Delete(':id')
