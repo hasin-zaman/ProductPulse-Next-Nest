@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsEmail, Length, IsOptional, IsNumberString } from 'class-validator';
 import { CNICFormat } from 'src/validation/cnicFormat';
 
-export class createUserDto {
+export class CreateUserDto {
 
     @IsNotEmpty({ message: 'Cnic is required.' })
     @CNICFormat()
@@ -29,7 +29,7 @@ export class createUserDto {
     email: string;
 }
 
-export class updateUserDto {
+export class UpdateUserDto {
 
     @IsOptional()
     @IsNotEmpty({ message: 'Cnic is required.' })

@@ -1,5 +1,5 @@
-import { Role } from "src/enums/role.enum";
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Role } from "../../enums/role.enum";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Response } from "../responses/response.entity";
 
 @Entity({ name: 'admins' })
@@ -25,16 +25,14 @@ export class Admin {
 
   @Column({
     type: 'enum',
-    enum: Role,
-    default: Role.ADMIN
+    enum: Role
   })
   role: Role;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
+  @CreateDateColumn({
+    type: 'timestamp'
   })
-  createdAt: Date;
+  createdAt: Date
 
   @OneToMany(() => Response, (response) => response.admin)
   responses: Response[];

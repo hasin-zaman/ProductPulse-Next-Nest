@@ -5,10 +5,10 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './modules/users/user.entity';
 import { Complaint } from './modules/complaints/complaint.entity';
-import { UserModule } from './modules/users/user.module';
-import { ComplaintModule } from './modules/complaints/complaint.module';
+import { UsersModule } from './modules/users/users.module';
+import { ComplaintsModule } from './modules/complaints/complaints.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AdminModule } from './modules/admins/admin.module';
+import { AdminsModule } from './modules/admins/admins.module';
 import { Admin } from './modules/admins/admin.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
@@ -16,10 +16,14 @@ import { RolesGuard } from './utils/roles.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { Response } from './modules/responses/response.entity';
-import { ResponseModule } from './modules/responses/response.module';
+import { ResponsesModule } from './modules/responses/responses.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduledTasksModule } from './modules/scheduledTasks/scheduled-tasks.module';
 
 @Module({
-  imports: [AuthModule, AdminModule, UserModule, ComplaintModule, ResponseModule, ConfigModule.forRoot({isGlobal: true}), 
+  imports: [ScheduledTasksModule, AdminsModule, UsersModule, ComplaintsModule, ResponsesModule, AuthModule,
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({isGlobal: true}), 
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 10
@@ -34,6 +38,7 @@ import { ResponseModule } from './modules/responses/response.module';
       password: configService.get<string>('DB_PASSWORD'),
       database: configService.get<string>('DB_DATABASE'),
       entities: [Admin, User, Complaint, Response],
+      timezone: 'Asia/Karachi',
       synchronize: true
     }),
     inject: [ConfigService]

@@ -1,8 +1,9 @@
-import { ComplaintAgainst } from "src/enums/complaintAgainst";
-import { ComplaintOffice } from "src/enums/complaintOffice";
-import { ComplaintStatus } from "src/enums/complaintStatus";
-import { ComplaintType } from "src/enums/complaintType";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ComplaintAgainst } from "../../enums/complaint-against";
+import { ComplaintOffice } from "../../enums/complaint-office";
+import { ComplaintState } from "../../enums/complaint-state";
+import { ComplaintStatus } from "../../enums/complaint-status";
+import { ComplaintType } from "../../enums/complaint-type";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Response } from "../responses/response.entity";
 import { User } from "../users/user.entity";
 
@@ -56,7 +57,17 @@ export class Complaint {
     })
     status: ComplaintStatus
 
-    @Column()
+    @Column({
+        nullable: false,
+        type: 'enum',
+        enum: ComplaintState,
+        default: ComplaintState.NEW
+    })
+    state: ComplaintState
+
+    @CreateDateColumn({
+        type: 'timestamp'
+    })
     createdAt: Date
 
     @ManyToOne(() => User, user => user.complaints)

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Complaint } from "../complaints/complaint.entity";
 
 @Entity({ name: 'users' })
@@ -42,7 +42,9 @@ export class User {
     })
     email: string
 
-    @Column()
+    @CreateDateColumn({
+        type: 'timestamp'
+    })
     createdAt: Date
 
     @OneToMany(() => Complaint, complaint => complaint.user)

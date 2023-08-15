@@ -1,8 +1,8 @@
 import { Role } from "src/enums/role.enum";
 
 export type AdminParams = {
-    name: string;
     userName: string;
+    name: string;
     password: string;
     role: Role;
 }

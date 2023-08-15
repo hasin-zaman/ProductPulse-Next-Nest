@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class postResponseDto {
+export class PostResponseDto {
     
     @IsNotEmpty({ message: 'Response is required.' })
     response: string;

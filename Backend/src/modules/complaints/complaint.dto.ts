@@ -1,10 +1,11 @@
 import { IsEnum, IsNotEmpty, IsOptional, Length } from "class-validator";
-import { ComplaintAgainst } from "src/enums/complaintAgainst";
-import { ComplaintOffice } from "src/enums/complaintOffice";
-import { ComplaintStatus } from "src/enums/complaintStatus";
-import { ComplaintType } from "src/enums/complaintType";
+import { ComplaintAgainst } from "src/enums/complaint-against";
+import { ComplaintOffice } from "src/enums/complaint-office";
+import { ComplaintState } from "src/enums/complaint-state";
+import { ComplaintStatus } from "src/enums/complaint-status";
+import { ComplaintType } from "src/enums/complaint-type";
 
-export class registerComplaintDto {
+export class RegisterComplaintDto {
 
     @IsNotEmpty({ message: 'Complaint type is required.' })
     @IsEnum(ComplaintType, { message: 'Invalid enum value for complaint type. Should be `General` or `Child Related`' })
@@ -28,4 +29,8 @@ export class registerComplaintDto {
     @IsOptional()
     @IsEnum(ComplaintStatus, { message: 'Invalid enum value for complaint status.' })
     status: ComplaintStatus;
+
+    @IsOptional()
+    @IsEnum(ComplaintState, { message: 'Invalid enum value for complaint state.' })
+    state: ComplaintState;
 }

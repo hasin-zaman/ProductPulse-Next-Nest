@@ -1,8 +1,56 @@
+import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from "class-validator";
 import { Role } from "src/enums/role.enum";
 
-export class AdminDto {
-    name: string;
+export class CreateAdminDto {
+
+    @IsString()
+    @IsNotEmpty({ message: 'User name is required.' })
+    @MinLength(6, { message: 'Minimum length of username should be 6 characters.' })
+    @MaxLength(20, { message: 'Maximum length of username should be 20 characters.' })
     userName: string;
+
+    @IsNotEmpty({ message: 'Name is required.' })
+    @MinLength(6, { message: 'Minimum length of name should be 6 characters.' })
+    name: string;
+
+    @IsNotEmpty({ message: 'Password is required.' })
+    @MinLength(8, { message: 'Minimum length should be 8 characters.' })
+    @Matches(/[a-z]/, { message: 'Password must contain at least one lowercase letter.' })
+    @Matches(/[A-Z]/, { message: 'Password must contain at least one uppercase letter.' })
+    @Matches(/\d/, { message: 'Password must contain at least one digit.' })
+    @Matches(/[!@#$%^&*]/, { message: 'Password must contain at least one special character (!@#$%^&*)' })
     password: string;
+
+    @IsNotEmpty({ message: 'Role is required.' })
+    @IsEnum(Role, { message: 'Invalid enum value for role.' })
+    role: Role;
+}
+
+export class UpdateAdminDto {
+
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty({ message: 'User name is required.' })
+    @MinLength(6, { message: 'Minimum length of username should be 6 characters.' })
+    @MaxLength(20, { message: 'Maximum length of username should be 20 characters.' })
+    userName: string;
+
+    @IsOptional()
+    @IsNotEmpty({ message: 'Name is required.' })
+    @MinLength(6, { message: 'Minimum length of name should be 6 characters.' })
+    name: string;
+
+    @IsOptional()
+    @IsNotEmpty({ message: 'Password is required.' })
+    @MinLength(8, { message: 'Minimum length should be 8 characters.' })
+    @Matches(/[a-z]/, { message: 'Password must contain at least one lowercase letter.' })
+    @Matches(/[A-Z]/, { message: 'Password must contain at least one uppercase letter.' })
+    @Matches(/\d/, { message: 'Password must contain at least one digit.' })
+    @Matches(/[!@#$%^&*]/, { message: 'Password must contain at least one special character (!@#$%^&*)' })
+    password: string;
+
+    @IsOptional()
+    @IsNotEmpty({ message: 'Role is required.' })
+    @IsEnum(Role, { message: 'Invalid enum value for role.' })
     role: Role;
 }

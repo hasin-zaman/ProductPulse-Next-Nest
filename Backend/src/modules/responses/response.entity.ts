@@ -1,5 +1,5 @@
-import { ResponseStatus } from "src/enums/responseStatus";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ResponseStatus } from "../../enums/response-status";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Complaint } from "../complaints/complaint.entity";
 import { Admin } from "../admins/admin.entity";
 
@@ -26,7 +26,9 @@ export class Response {
     })
     status: ResponseStatus
 
-    @Column()
+    @CreateDateColumn({
+        type: 'timestamp'
+    })
     createdAt: Date
 
     @ManyToOne(() => Complaint, complaint => complaint.responses)
