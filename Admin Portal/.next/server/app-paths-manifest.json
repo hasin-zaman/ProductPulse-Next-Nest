@@ -1,8 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/portal/complaints/page": "app/portal/complaints/page.js",
-  "/portal/profile/page": "app/portal/profile/page.js",
-  "/portal/complaints/[complaint]/page": "app/portal/complaints/[complaint]/page.js",
-  "/portal/profile/edit/page": "app/portal/profile/edit/page.js",
-  "/portal/users/[user]/page": "app/portal/users/[user]/page.js"
-}
