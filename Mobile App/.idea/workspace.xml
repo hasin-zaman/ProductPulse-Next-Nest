@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bdeb015d-3124-4066-b3f8-3665cedc7381" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/app/portal/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/app/portal/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/app/portal/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/app/portal/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/components/mui/muiButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/components/mui/muiButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/components/mui/muiDrawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/components/mui/muiDrawer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Admin Portal/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin Portal/styles/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/admins/admin.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/admins/admin.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/admins/admins.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/admins/admins.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/admins/admins.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/admins/admins.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaint.entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaint.entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaints.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaints.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaints.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/complaints/complaints.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/responses/responses.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/responses/responses.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/users/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/users/users.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/modules/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/modules/users/users.service.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2WFxtdbUON9pfyKidfgOnZIrA6K" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "C:/Hasin/Akodra Development/Mohtasib/Mobile App",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bdeb015d-3124-4066-b3f8-3665cedc7381" name="Changes" comment="" />
+      <created>1696342344845</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696342344845</updated>
+    </task>
+    <servers />
+  </component>
+</project>
