@@ -1,5 +1,6 @@
-import { Controller, Post, Get, Body, Param, Patch, Delete, UsePipes, ValidationPipe, Request, ForbiddenException } from "@nestjs/common";
+import { Controller, Query, Post, Get, Body, Param, Patch, Delete, UsePipes, ValidationPipe, Request, ForbiddenException } from "@nestjs/common";
 import { Role } from "src/enums/role.enum";
+import { PaginationDto } from "src/utils/pagination.dto";
 import { Roles } from "src/utils/roles.decorator";
 import { CreateAdminDto, UpdateAdminDto } from "./admin.dto";
 import { AdminsService } from "./admins.service";
@@ -17,8 +18,8 @@ export class AdminsController {
 
     @Get()
     @Roles(Role.ADMIN)
-    getAdmins() {
-        return this.adminService.getAdmins();
+    getAdmins(@Query() paginationDto: PaginationDto) {
+        return this.adminService.getAdmins(paginationDto);
     }
 
     @Get(':userName')

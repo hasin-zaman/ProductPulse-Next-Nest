@@ -45,7 +45,7 @@ export class Complaint {
 
     @Column({
         nullable: false,
-        default: ''
+        type: 'text'
     })
     complaint: string
     

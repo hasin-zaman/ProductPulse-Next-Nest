@@ -31,7 +31,17 @@ export class UsersService {
         const { page, limit } = paginationDto;
         const skip=(page-1) * limit;
 
-        return await this.userRepository.find({ skip, take: limit, relations: ['complaints'] });
+        const users = await this.userRepository.find({ skip, take: limit, relations: ['complaints'] });
+
+        const totalUsers = await this.userRepository.count();
+
+        return {page, totalUsers, totalPages: Math.ceil(totalUsers/limit), users};
+    }
+
+    async getUsersDetails(){
+        const totalUsers = await this.userRepository.count();
+
+        return { totalUsers }
     }
 
     async getUser(cnic: string) {

@@ -1,5 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ComplaintState } from 'src/enums/complaint-state';
+import { ComplaintStatus } from 'src/enums/complaint-status';
+import { ComplaintType } from 'src/enums/complaint-type';
 import complaintEnumMapping from 'src/utils/complaint-enum-mapping';
 import { PaginationDto } from 'src/utils/pagination.dto';
 import { Repository } from 'typeorm';
@@ -23,7 +26,6 @@ export class ComplaintsService {
         const user=await this.findUser(cnic);
 
         const date=new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' })
-        console.log(date)
 
         const complaint=this.complaintRepository.create({ ...complaintDetails, user });
 
@@ -34,7 +36,26 @@ export class ComplaintsService {
         const { page, limit } = paginationDto;
         const skip = (page-1) * limit;
 
-        return await this.complaintRepository.find({ skip, take: limit, relations: ['user'] });
+        const complaints = await this.complaintRepository.find({ skip, take: limit, relations: ['user'] });
+
+        const totalComplaints = await this.complaintRepository.count();
+
+        return {page, totalComplaints, totalPages: Math.ceil(totalComplaints/limit), complaints};
+    }
+
+    async getComplaintsDetails(){
+
+        const totalComplaints = await this.complaintRepository.count();
+        const totalGeneralComplaints = await this.complaintRepository.countBy({ type: ComplaintType.GENERAL });
+        const totalChildRelatedComplaints = await this.complaintRepository.countBy({ type: ComplaintType.CHILD_RELATED });
+        const totalUnreadComplaints = await this.complaintRepository.countBy({ status: ComplaintStatus.UNREAD });
+        const totalInProcessComplaints = await this.complaintRepository.countBy({ status: ComplaintStatus.IN_PROCESS });
+        const totalResolvedComplaints = await this.complaintRepository.countBy({ status: ComplaintStatus.RESOLVED });
+        const totalNewComplaints = await this.complaintRepository.countBy({ state: ComplaintState.NEW });
+        const totalPendingComplaints = await this.complaintRepository.countBy({ state: ComplaintState.PENDING });
+        const totalCriticalComplaints = await this.complaintRepository.countBy({ state: ComplaintState.CRITICAL });
+
+        return { totalComplaints, totalGeneralComplaints, totalChildRelatedComplaints, totalUnreadComplaints, totalInProcessComplaints, totalResolvedComplaints, totalNewComplaints, totalPendingComplaints, totalCriticalComplaints }
     }
 
     async filterComplaints(paginationDto: PaginationDto, filter: string, value: string){
@@ -49,7 +70,7 @@ export class ComplaintsService {
             complaintAgainst: 'complaintAgainst'
         }
 
-        const where = {}
+        let where = {}
 
         if(filter && filterableFields[filter]){
             let enumValue;
@@ -95,7 +116,11 @@ export class ComplaintsService {
             throw new BadRequestException(`Invalid filter parameter. Choose from valid parameters: ${Object.keys(filterableFields).join(', ')}`);
         }
 
-        return await this.complaintRepository.find({ skip, take: limit, relations: ['user'], where });
+        const complaints = await this.complaintRepository.find({ skip, take: limit, relations: ['user'], where });
+
+        const totalComplaints = await this.complaintRepository.countBy(where);
+
+        return {page, totalComplaints, totalPages: Math.ceil(totalComplaints/limit), complaints};
     }
 
     async getComplaint(id: number){

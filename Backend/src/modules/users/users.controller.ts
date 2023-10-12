@@ -23,6 +23,11 @@ export class UsersController {
         return this.userService.getUsers(paginationDto);
     }
 
+    @Get('details')
+    getUsersDetails() {
+        return this.userService.getUsersDetails();
+    }
+
     @Get(':cnic')
     getUser(@Param('cnic') cnic: string){
         return this.userService.getUser(cnic);

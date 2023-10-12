@@ -25,6 +25,11 @@ export class ComplaintsController {
         return this.complaintService.getComplaints(paginationDto);
     }
 
+    @Get('details')
+    getComplaintsDetails() {
+        return this.complaintService.getComplaintsDetails();
+    }
+
     @Get('filter/:filter/:value')
     @UsePipes(ValidationPipe)
     filterComplaints(@Query() paginationDto: PaginationDto, @Param('filter') filter: string, @Param('value') value: string) {

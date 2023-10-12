@@ -34,7 +34,11 @@ export class ResponsesService {
         const { page, limit } = paginationDto;
         const skip=(page-1) * limit;
 
-        return await this.responseRepository.find({ skip, take: limit, relations: ['complaint', 'admin'] });
+        const responses = await this.responseRepository.find({ skip, take: limit, relations: ['complaint', 'admin'] });
+
+        const totalResponses = await this.responseRepository.count();
+
+        return {page, totalResponses, totalPages: Math.ceil(totalResponses/limit), responses};
     }
 
     async getResponse(id: number){

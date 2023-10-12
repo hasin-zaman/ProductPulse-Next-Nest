@@ -4,6 +4,7 @@ import { hashPassword } from '../../utils/bcrypt';
 import { Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { AdminParams } from './admin.type';
+import { PaginationDto } from 'src/utils/pagination.dto';
 
 @Injectable()
 export class AdminsService {
@@ -23,11 +24,19 @@ export class AdminsService {
         const password=hashPassword(adminDetails.password);
 
         const admin=this.adminRepository.create({ ...adminDetails, password });
-        return await this.adminRepository.save(admin);
+        await this.adminRepository.save(admin);
+        return { message: 'Admin registered successfully!' };
     }
 
-    async getAdmins(){
-        return await this.adminRepository.find();
+    async getAdmins(paginationDto: PaginationDto){
+        const { page, limit } = paginationDto;
+        const skip = (page-1) * limit;
+
+        const admins =  await this.adminRepository.find({ skip, take: limit });
+
+        const totalAdmins = await this.adminRepository.count();
+
+        return {page, totalAdmins, totalPages: Math.ceil(totalAdmins/limit), admins};
     }
 
     async getAdmin(userName: string) {
@@ -48,7 +57,17 @@ export class AdminsService {
             adminDetails.password=hashPassword(adminDetails.password);
         }
 
-        return await this.adminRepository.update({ userName: userName }, { ...adminDetails });
+        try {
+            const admin = await this.adminRepository.update({ userName: userName }, { ...adminDetails });
+            return { message: 'Admin updated successfully!', admin };
+        } catch (error) {
+            // Check if the error is a foreign key constraint violation
+            if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+              throw new BadRequestException('Cannot update the admin due to a foreign key constraint violation.');
+            }
+      
+            throw error;
+        }
     }
 
     async deleteAdmin(userName: string) {
