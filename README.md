@@ -1,2 +1,0 @@
-# Mohtasib
-Complaint registration app
